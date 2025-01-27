@@ -1,0 +1,16 @@
+<!-- src/main/resources/templates/authenticationForm.html -->
+<div id="jqueryFileTree">
+
+  <form method="post" id="authenticationForm" th:action="@{/auth}">
+    <input type="hidden" id="currentDir" name="currentDir" th:value="${currentDir}" />
+
+    <label for="username" th:text="#{auth.username}"></label>
+    <input type="text" id="username" name="username" th:value="${username}" />
+
+    <label for="password" th:text="#{auth.password}"></label>
+    <input type="password" id="password" name="password" th:value="${password}" />
+
+    <a id="authenticate" href="" onclick="return false;" th:text="#{auth.submit}"></a>
+  </form>
+
+</div>

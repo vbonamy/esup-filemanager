@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Licensed to EsupPortail under one or more contributor license
+    agreements. See the NOTICE file distributed with this work for
+    additional information regarding copyright ownership.
+
+    EsupPortail licenses this file to you under the Apache License,
+    Version 2.0 (the "License"); you may not use this file except in
+    compliance with the License. You may obtain a copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+    <!-- drivesCategories lets you organize the tree of your drives .
+         On the root you can have categories and on each categories you can have drives.
+         Drives are defined bellow : values of 'drives' property must map to a FSAccess bean.
+    -->
+    <util:map id="drivesCategories">
+        <entry key="Stockage">
+            <bean class="org.esupportail.filemanager.beans.DrivesCategory">
+                <property name="icon" value="/img/drives/drive_user.png" />
+                <property name="drives">
+                    <list>
+                        <value>Bob</value>
+                        <value>Homedir Example</value>
+                        <value>Groupdir Example</value>
+                    </list>
+                </property>
+            </bean>
+        </entry>
+    </util:map>
+
+    <!-- bob doesn't use authentication
+    bob is displayed to all people
+    -->
+    <bean class="org.esupportail.filemanager.services.vfs.VfsAccessImpl" lazy-init="true">
+        <property name="driveName" value="Bob"/>
+        <property name="icon" value="/img/drives/tux.png" />
+        <property name="uri" value="file:///tmp"/>
+        <property name="accessRule" value="#userAttributes['eduPersonPrincipalName']=='bob@example.org' or true"/>
+    </bean>
+
+
+    <util:properties id="cifsProperties">
+        <prop key="jcifs.encoding">UTF8</prop>
+        <prop key="jcifs.smb.client.disablePlainTextPasswords">false</prop>
+        <prop key="jcifs.smb.client.responseTimeout">400000</prop>
+        <prop key="jcifs.util.loglevel">3</prop>
+        <prop key="jcifs.smb.client.maxVersion">SMB311</prop>
+    </util:properties>
+
+
+    <bean class="org.esupportail.filemanager.services.cifs.CifsAccessImpl" scope="session" lazy-init="true">
+        <property name="driveName" value="Homedir Example"/>
+        <property name="icon" value="/img/drives/user.png" />
+        <property name="uri" value="smb://stockage.example.org/personnels/@uid@/"/>
+        <property name="jcifsConfigProperties" ref="cifsProperties" />
+        <property name="userAuthenticatorService" ref="univ_example_casv5_auth"/>
+        <property name="accessRule" value="#userAttributes['eduPersonAffiliation'].contains('member') and !#userAttributes['eduPersonAffiliation'].contains('student')"/>
+    </bean>
+
+    <bean class="org.esupportail.filemanager.services.cifs.CifsAccessImpl" scope="session" lazy-init="true">
+        <property name="driveName" value="Groupdir Example"/>
+        <property name="icon" value="/img/drives/group.png" />
+        <property name="uri" value="smb://stockage.example.org/Groupdirs/"/>
+        <property name="jcifsConfigProperties" ref="cifsProperties" />
+        <property name="jcifsSynchronizeRootListing" value="true" />
+        <property name="userAuthenticatorService" ref="univ_example_casv5_auth"/>
+        <property name="accessRule" value="#userAttributes['eduPersonAffiliation'].contains('member') and !#userAttributes['eduPersonAffiliation'].contains('student')"/>
+    </bean>
+
+    <bean name="univ_example_casv5_auth" class="org.esupportail.filemanager.services.auth.ClearPassUserCasAuthenticatorService"
+          scope="session">
+        <property name="domain" value="example"/>
+        <property name="pkcs8Key" value="${cas.clearpass.key}"/>
+    </bean>
+
+</beans>

@@ -1,0 +1,37 @@
+<!-- src/main/resources/templates/details_image.html -->
+<h3 class="ui-widget-header ui-corner-all" th:text="#{details.header}"></h3>
+
+<img th:src="@{/fetchImage(dir=${file.encPath})}" class="detailsImage" alt="image" />
+
+<div class="details-spacer"></div>
+<div class="details-attribute-header" th:text="#{details.title} + ' : '"></div>
+<div class="details-attribute">
+    <!-- <img th:src="${file.icon}" alt="icon" /> -->
+    <span th:text="${file.title}"></span>
+</div>
+
+<div class="details-attribute-header" th:text="#{details.imagesize} + ' : '"></div>
+<div class="details-attribute">
+    <span id="image_width"></span>px X <span id="image_height"></span>px
+</div>
+
+<div class="details-attribute-header" th:text="#{details.size} + ' : '"></div>
+<div class="details-attribute">
+    <span th:text="${file.formattedSize.size}"></span>
+    <span th:text="#{|details.${file.formattedSize.unit}|}"></span>
+</div>
+
+<div class="details-attribute-header" th:text="#{details.type} + ' : '"></div>
+<div class="details-attribute" th:text="${file.mimeType}"></div>
+
+<div class="details-attribute-header" th:text="#{details.lastModifiedTime} + ' : '"></div>
+<div class="details-attribute" th:text="${#dates.format(file.lastModifiedTime, datePattern)}"></div>
+
+<div class="details-spacer"></div>
+
+<a id="detailsFileForm" th:href="@{/downloadFile(dir=${file.encPath})}">
+    <div id="detail-download" th:text="#{details.download}"></div>
+    <div id="detail-view-image" th:text="#{details.viewimage}"></div>
+</a>
+
+<div class="details-spacer"></div>

@@ -1,0 +1,31 @@
+<!-- src/main/resources/templates/details_file.html -->
+<h3 class="ui-widget-header ui-corner-all" th:text="#{details.header}"></h3>
+
+<div class="details-spacer"></div>
+
+<div class="details-attribute-header" th:text="#{details.title} + ' : '"></div>
+<div class="details-attribute">
+    <!-- <img th:src="${file.icon}" alt="icon" /> -->
+    <span th:text="${file.title}"></span>
+</div>
+
+<div class="details-attribute-header" th:text="#{details.size} + ' : '"></div>
+<div class="details-attribute">
+    <span th:text="${file.formattedSize.size}"></span>
+    <span th:text="#{|details.${file.formattedSize.unit}|}"></span>
+</div>
+
+<div class="details-attribute-header" th:text="#{details.type} + ' : '"></div>
+<div class="details-attribute" th:text="${file.mimeType}"></div>
+
+<div th:if="${file.lastModifiedTime != null}">
+    <div class="details-attribute-header" th:text="#{details.lastModifiedTime} + ' : '"></div>
+    <div class="details-attribute" th:text="${#dates.format(file.lastModifiedTime, datePattern)}"></div>
+</div>
+
+<div class="details-spacer"></div>
+
+<a id="detailsFileForm" th:href="@{/downloadFile(dir=${file.encPath})}">
+    <div id="detail-download" th:text="#{details.download}"></div>
+</a>
+

@@ -54,10 +54,10 @@
     classes to the respective LI element(s)
 */
 
-.contextMenu LI.download A { background-image: url(/esup-filemanager/img/flaticons/download_16px.png); }
-.contextMenu LI.zip A { background-image: url(/esup-filemanager/img/flaticons/zip_16px.png); }
-.contextMenu LI.cut A { background-image: url(/esup-filemanager/img/flaticons/cut_16px.png); }
-.contextMenu LI.copy A { background-image: url(/esup-filemanager/img/flaticons/copy_16px.png); }
-.contextMenu LI.paste A { background-image: url(/esup-filemanager/img/flaticons/paste_16px.png);  }
-.contextMenu LI.delete A { background-image: url(/esup-filemanager/img/flaticons/delete_16px.png);  }
-.contextMenu LI.rename A { background-image: url(/esup-filemanager/img/flaticons/rename_16px.png); }
+.contextMenu LI.download A { background-image: url(/img/flaticons/download_16px.png); }
+.contextMenu LI.zip A { background-image: url(/img/flaticons/zip_16px.png); }
+.contextMenu LI.cut A { background-image: url(/img/flaticons/cut_16px.png); }
+.contextMenu LI.copy A { background-image: url(/img/flaticons/copy_16px.png); }
+.contextMenu LI.paste A { background-image: url(/img/flaticons/paste_16px.png);  }
+.contextMenu LI.delete A { background-image: url(/img/flaticons/delete_16px.png);  }
+.contextMenu LI.rename A { background-image: url(/img/flaticons/rename_16px.png); }
