@@ -20,6 +20,17 @@ public class CasUserDetailsService extends AbstractCasAssertionUserDetailsServic
     protected UserDetails loadUserDetails(Assertion assertion) {
         List<GrantedAuthority> grantedAuthorities = new ArrayList();
         Map<String, Object> attributes = assertion.getPrincipal().getAttributes();
+        if(attributes.get("memberOf") != null) {
+            Object memberOfAttr = attributes.get("memberOf");
+            if(memberOfAttr instanceof List) {
+                List<String> memberOfs = (List<String>) memberOfAttr;
+                for(String group : memberOfs) {
+                    grantedAuthorities.add(() -> "ROLE_" + group);
+                }
+            } else if(memberOfAttr instanceof String) {
+                grantedAuthorities.add(() ->  "ROLE_" + (String) memberOfAttr);
+            }
+        }
         log.info("Loading user attributes for CAS user {} : {}", assertion.getPrincipal().getName(), attributes);
         return new CasUser(assertion.getPrincipal().getName(), "NO_PASSWORD", grantedAuthorities, attributes);
     }
