@@ -125,10 +125,26 @@ public class CifsAccessImpl extends FsAccess implements DisposableBean {
 
     @Override
     public void close() {
-        // TODO Auto-generated method stub
-        log.debug("Close : Nothing to do with jcifs!");
-        this.root = null;
+        log.debug("Closing CIFS connection");
+        if (this.root != null) {
+            try {
+                this.root.close();
+            } catch (Exception e) {
+                log.warn("Error closing SmbFile root", e);
+            }
+            this.root = null;
+        }
+        if (this.cifsContext != null) {
+            try {
+                this.cifsContext.close();
+            } catch (CIFSException e) {
+                log.warn("Error closing CIFSContext", e);
+            }
+            this.cifsContext = null;
+        }
+        this.userAuthenticator = null;
     }
+
 
     /**
      * @return
@@ -480,6 +496,7 @@ public class CifsAccessImpl extends FsAccess implements DisposableBean {
         }
     }
 
+    @Override
     public void destroy() throws Exception {
         this.close();
     }
